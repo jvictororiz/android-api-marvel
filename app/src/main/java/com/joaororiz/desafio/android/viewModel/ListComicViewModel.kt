@@ -1,13 +1,10 @@
 package com.joaororiz.desafio.android.viewModel
 
-import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations.switchMap
-import androidx.lifecycle.viewModelScope
-import androidx.paging.PagedList
 import com.joaororiz.desafio.android.data.entities.Character
 import com.joaororiz.desafio.android.datasource.Listing
-import com.joaororiz.desafio.android.service.CharactereRepository
+import com.joaororiz.desafio.android.repository.CharactereRepository
 import com.joaororiz.desafio.android.ui.base.BaseViewModel
 
 class ListComicViewModel(charactereRepository: CharactereRepository) : BaseViewModel() {

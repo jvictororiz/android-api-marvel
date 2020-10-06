@@ -3,7 +3,7 @@ package com.joaororiz.desafio.android.base
 import android.content.Context
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import com.nhaarman.mockitokotlin2.mock
-import com.joaororiz.desafio.android.modules.*
+import com.joaororiz.desafio.android.di.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.ObsoleteCoroutinesApi

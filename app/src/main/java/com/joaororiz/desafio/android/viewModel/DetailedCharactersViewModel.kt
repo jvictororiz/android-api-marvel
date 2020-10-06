@@ -5,7 +5,7 @@ import com.joaororiz.desafio.android.data.entities.Character
 import com.joaororiz.desafio.android.data.entities.Comic
 import com.joaororiz.desafio.android.data.entities.DataWrapper
 import com.joaororiz.desafio.android.data.entities.GlobalResponse
-import com.joaororiz.desafio.android.service.CharactereRepository
+import com.joaororiz.desafio.android.repository.CharactereRepository
 import com.joaororiz.desafio.android.ui.base.BaseViewModel
 
 class DetailedCharactersViewModel(private val charactereRepository: CharactereRepository) : BaseViewModel() {

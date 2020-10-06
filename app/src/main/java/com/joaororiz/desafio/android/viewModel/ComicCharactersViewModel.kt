@@ -3,7 +3,6 @@ package com.joaororiz.desafio.android.viewModel
 import androidx.lifecycle.MutableLiveData
 import com.joaororiz.desafio.android.R
 import com.joaororiz.desafio.android.data.entities.*
-import com.joaororiz.desafio.android.service.CharactereRepository
 import com.joaororiz.desafio.android.ui.base.BaseViewModel
 import com.joaororiz.desafio.android.util.ext.toMoney
 import com.joaororiz.desafio.android.util.resources.ResourceProvider
