@@ -1,76 +1,118 @@
-//package com.joaororiz.desafio.android.viewModel
-//
-//import androidx.lifecycle.Observer
-//import com.nhaarman.mockitokotlin2.mock
-//import com.nhaarman.mockitokotlin2.verify
-//import com.nhaarman.mockitokotlin2.whenever
-//import com.joaororiz.desafio.android.base.BaseTest
-//import com.joaororiz.desafio.android.R
-//import com.joaororiz.desafio.android.data.entities.Character
-//import com.joaororiz.desafio.android.usecase.FindUsersUseCase
-//import junit.framework.Assert.assertNotNull
-//import junit.framework.Assert.assertNull
-//import kotlinx.coroutines.runBlocking
-//import org.junit.Before
-//import org.junit.Test
-//import org.mockito.Mock
-//
-//
-//class ListComicViewModelTest : BaseTest() {
-//    @Mock
-//    private lateinit var resultUsersObserver: Observer<List<Character>>
-//    @Mock
-//    private lateinit var alertOfflineObserver: Observer<Int>
-//    @Mock
-//    private lateinit var errorObserver: Observer<String>
-//    @Mock
-//    private lateinit var findUsersUseCase: FindUsersUseCase
-//
-//    private lateinit var listComicViewModel:ListComicViewModel
-//
-//
-//    @Before
-//    fun init(){
-//        listComicViewModel = ListComicViewModel(findUsersUseCase)
-//    }
-//
-//    @Test
-//    fun `when viewModel calls listAllUsers with success then sets resultUsers with success`() {
-//        runBlocking { whenever(findUsersUseCase.listAllUsers()).thenReturn(ResultRest.success(listOf())) }
-//        listComicViewModel.resultUsersObserver.observeForever(resultUsersObserver)
-//        listComicViewModel.findAllUser()
-//        //Assert
-//        verify(resultUsersObserver).onChanged(listOf())
-//        assertNotNull(listComicViewModel.resultUsersObserver.value)
-//    }
-//
-//    @Test
-//    fun `when viewModel calls listAll with error then sets error LiveData`() {
-//        val expectedError = "Erro de conexão"
-//        runBlocking { whenever(findUsersUseCase.listAllUsers()).thenReturn(ResultRest.error(expectedError)) }
-//        listComicViewModel.errorObserver.observeForever(errorObserver)
-//        listComicViewModel.resultUsersObserver.observeForever(resultUsersObserver)
-//        listComicViewModel.findAllUser()
-//        //Assert
-//        verify(errorObserver).onChanged(expectedError)
-//        assertNull(listComicViewModel.resultUsersObserver.value)
-//    }
-//
-//    @Test
-//    fun `when viewmodel calls listAll offline then return the datas in base with sucess`()  {
-//        val expectedOfflineUsers = listOf(Character("img", "joao", 1, "joaov"))
-//        runBlocking {
-//            whenever(findUsersUseCase.listAllUsers()).thenReturn(ResultRest.cacheSuccess(expectedOfflineUsers, mock()))
-//        }
-//        listComicViewModel.resultUsersObserver.observeForever(resultUsersObserver)
-//        listComicViewModel.alertOfflineObserver.observeForever(alertOfflineObserver)
-//        listComicViewModel.errorObserver.observeForever(errorObserver)
-//        listComicViewModel.findAllUser()
-//
-//        //Assert
-//        verify(alertOfflineObserver).onChanged(R.string.alert_offline)
-//        verify(resultUsersObserver).onChanged(expectedOfflineUsers)
-//    }
-//
-//
-//}
+package com.joaororiz.desafio.android.viewModel
+
+import android.app.Application
+import androidx.lifecycle.Observer
+import com.joaororiz.desafio.android.R
+import com.joaororiz.desafio.android.base.BaseTest
+import com.joaororiz.desafio.android.data.entities.Character
+import com.joaororiz.desafio.android.data.entities.Comic
+import com.joaororiz.desafio.android.data.entities.GlobalResponse
+import com.joaororiz.desafio.android.repository.CharactereRepository
+import com.joaororiz.desafio.android.viewModel.main.MainViewModel
+import com.nhaarman.mockitokotlin2.any
+import com.nhaarman.mockitokotlin2.mock
+import com.nhaarman.mockitokotlin2.verify
+import com.nhaarman.mockitokotlin2.whenever
+import io.reactivex.Single
+import junit.framework.Assert.*
+import org.junit.Test
+import org.mockito.Mock
+
+
+class ListComicViewModelTest : BaseTest() {
+    @Mock
+    private lateinit var listAllCharacter: Observer<List<Character>>
+
+    @Mock
+    private lateinit var listAllComics: Observer<List<Comic>>
+
+    @Mock
+    private lateinit var error: Observer<String>
+
+
+    @Mock
+    private lateinit var app: Application
+
+    @Mock
+    private lateinit var repository: CharactereRepository
+
+    private lateinit var viewModel: MainViewModel
+
+
+    @Test
+    fun `when viewModel calls listAllCharacters with success then sets _listAllCharacter with success`() {
+        val expectedMock = GlobalResponse(0, 0, 0, 0, listOf(Character(0, "", "", mock())))
+        whenever(repository.listAll(any(), any())).thenReturn(Single.just(expectedMock))
+
+        viewModel = MainViewModel(repository, app)
+        viewModel.listAllCharacter.observeForever(listAllCharacter)
+
+        verify(listAllCharacter).onChanged(expectedMock.results)
+        assertNotNull(viewModel.listAllCharacter.value)
+        assertEquals(viewModel.listAllCharacter.value, expectedMock.results)
+        assertNull(viewModel.error.value)
+    }
+
+    @Test
+    fun `when viewModel calls listAllCharacters with error then sets _error with success`() {
+        val messageError = "Error"
+        whenever(repository.listAll(any(), any())).thenReturn(Single.error(Exception(messageError)))
+
+        viewModel = MainViewModel(repository, app)
+        viewModel.error.observeForever(error)
+
+        verify(error).onChanged(messageError)
+    }
+
+    @Test
+    fun `when viewModel calls findComicsByCharactere with success but empty then sets _error with success`() {
+        val messageError = "Este personagem ainda não possui participação em Comic"
+        val expectedMock = GlobalResponse(0, 0, 0, 0, listOf<Comic>())
+        whenever(repository.findComicsByCharactere(any())).thenReturn(Single.just(expectedMock))
+        whenever(repository.listAll(any(), any())).thenReturn(Single.just(mock()))
+        whenever(app.getString(R.string.empty_list)).thenReturn(messageError)
+        viewModel = MainViewModel(repository, app)
+        viewModel.error.observeForever(error)
+        viewModel.selectCharactere(Character(0, "", "", mock()))
+        viewModel.findComicsByCharacter()
+
+        assertNull(viewModel.listAllComics.value)
+        verify(error).onChanged(messageError)
+    }
+
+    @Test
+    fun `when viewModel calls findComicsByCharactere with success then sets _listAllComics with success`() {
+        val expectedMock = GlobalResponse(0, 0, 0, 0, listOf(Comic("", "", mock(), listOf())))
+        whenever(repository.findComicsByCharactere(any())).thenReturn(Single.just(expectedMock))
+        whenever(repository.listAll(any(), any())).thenReturn(Single.just(mock()))
+        viewModel = MainViewModel(repository, app)
+        viewModel.selectCharactere(Character(0, "", "", mock()))
+        viewModel.listAllComics.observeForever(listAllComics)
+        viewModel.error.observeForever(error)
+        viewModel.findComicsByCharacter()
+
+
+        verify(listAllComics).onChanged(expectedMock.results)
+        assertNotNull(viewModel.listAllComics.value)
+        assertEquals(viewModel.listAllComics.value, expectedMock.results)
+        assertNull(viewModel.error.value)
+    }
+
+    @Test
+    fun `when viewModel calls findComicsByCharactere with error then sets _error with success`() {
+        val messageError = "Ocorreu um erro ao carregar os itens"
+        whenever(repository.listAll(any(), any())).thenReturn(Single.just(mock()))
+        whenever(repository.findComicsByCharactere(any())).thenReturn(Single.error(Exception(messageError)))
+        whenever(app.getString(R.string.error)).thenReturn(messageError)
+
+        viewModel = MainViewModel(repository, app)
+        viewModel.selectCharactere(Character(0, "", "", mock()))
+        viewModel.findComicsByCharacter()
+        viewModel.error.observeForever(error)
+
+        verify(error).onChanged(messageError)
+
+    }
+
+
+}

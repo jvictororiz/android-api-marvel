@@ -17,17 +17,14 @@
         android:theme="@style/AppTheme"
         tools:targetApi="n">
         <activity
-            android:screenOrientation="fullSensor"
             android:configChanges="orientation|keyboardHidden"
-            android:name=".ui.activity.ListComicActivity">
+            android:name="com.joaororiz.desafio.android.ui.main.activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".ui.activity.DetailedCharactersActivity" />
-        <activity android:name=".ui.activity.ComicCharactersActivity" />
     </application>
 
 </manifest>

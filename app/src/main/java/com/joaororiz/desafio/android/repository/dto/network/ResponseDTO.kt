@@ -1,14 +1,10 @@
-package com.joaororiz.desafio.android.data.entities
+package com.joaororiz.desafio.android.repository.dto.network
 
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
-data class Response<T>(
-    val data: T
-)
-
 @Parcelize
-data class GlobalResponse<T : Parcelable>(
+data class GlobalResponseDTO<T : Parcelable>(
     val offset: Int,
     val limit: Int,
     val total: Int,

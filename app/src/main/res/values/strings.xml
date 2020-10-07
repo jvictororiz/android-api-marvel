@@ -11,5 +11,7 @@
     <string name="not_prices">Não possui nenhum valor registrado</string>
     <string name="digital_purchase">Preço de compra digital</string>
     <string name="print_price">Preço de impressão</string>
+    <string name="empty_list">Este personagem ainda não possui participação em Comic</string>
+    <string name="empty_description">Este personangem não possui nenhuma descrição</string>
 
 </resources>

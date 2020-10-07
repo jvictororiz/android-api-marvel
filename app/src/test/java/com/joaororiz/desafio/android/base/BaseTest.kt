@@ -28,6 +28,7 @@ open class BaseTest : KoinTest {
 
     val context: Context = mock()
 
+    @Suppress("unused")
     @get:Rule
     val instantTaskExecutorRule = InstantTaskExecutorRule()
 
@@ -47,6 +48,7 @@ open class BaseTest : KoinTest {
             modules(
                 applicationModule,
                 repositoryModule,
+                dataSourceModule,
                 viewModelModules
             )
         }

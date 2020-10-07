@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="utf-8"?>
+<navigation xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/login"
+    app:startDestination="@id/listComicsFragment">
+
+
+    <fragment
+        android:id="@+id/listComicsFragment"
+        android:name="com.joaororiz.desafio.android.ui.main.fragment.ListComicsFragment"
+        android:label="ListComicsFragment"
+        tools:layout="@layout/fragment_character_list" >
+        <action
+            android:id="@+id/action_listComicsFragment_to_detailCharactersFragment"
+            app:destination="@id/detailCharactersFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/detailCharactersFragment"
+        tools:layout="@layout/fragment_detailed_characters"
+        android:name="com.joaororiz.desafio.android.ui.main.fragment.DetailCharactersFragment"
+        android:label="DetailCharactersFragment" />
+</navigation>
