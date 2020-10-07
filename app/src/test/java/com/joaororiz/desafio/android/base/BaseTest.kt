@@ -24,7 +24,7 @@ import org.mockito.junit.MockitoJUnitRunner
  * Classe base para os testes com view models.
  */
 @RunWith(MockitoJUnitRunner::class)
-open class BaseTest : KoinTest {
+abstract class BaseTest : KoinTest {
 
     val context: Context = mock()
 
@@ -49,6 +49,7 @@ open class BaseTest : KoinTest {
                 applicationModule,
                 repositoryModule,
                 dataSourceModule,
+                useCaseModule,
                 viewModelModules
             )
         }

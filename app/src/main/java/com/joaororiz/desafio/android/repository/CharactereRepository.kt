@@ -4,7 +4,6 @@ import com.joaororiz.desafio.android.data.entities.Character
 import com.joaororiz.desafio.android.data.entities.Comic
 import com.joaororiz.desafio.android.data.entities.GlobalResponse
 import com.joaororiz.desafio.android.repository.datasource.characteres.CharactereDataSource
-import com.joaororiz.desafio.android.repository.datasource.characteres.remote.CharacterRemoteDataSource
 import io.reactivex.Single
 
 interface CharactereRepository {

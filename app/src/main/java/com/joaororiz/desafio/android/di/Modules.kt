@@ -5,6 +5,7 @@ import com.joaororiz.desafio.android.data.service.MarvelService
 import com.joaororiz.desafio.android.repository.CharactereRepository
 import com.joaororiz.desafio.android.repository.datasource.characteres.CharactereDataSource
 import com.joaororiz.desafio.android.repository.datasource.characteres.remote.CharacterRemoteDataSource
+import com.joaororiz.desafio.android.useCase.CharacterUseCase
 import com.joaororiz.desafio.android.viewModel.main.MainViewModel
 import org.koin.android.ext.koin.androidApplication
 import org.koin.android.ext.koin.androidContext
@@ -17,6 +18,10 @@ val viewModelModules = module {
 
 val repositoryModule = module {
     single<CharactereRepository> { CharactereRepository.CharactereRepositoryImpl(get()) }
+}
+
+val useCaseModule = module {
+    single<CharacterUseCase> { CharacterUseCase.CharacterUseCaseImpl(get()) }
 }
 
 val dataSourceModule = module {

@@ -7,12 +7,12 @@ import androidx.lifecycle.MutableLiveData
 import com.joaororiz.desafio.android.R
 import com.joaororiz.desafio.android.data.entities.Character
 import com.joaororiz.desafio.android.data.entities.Comic
-import com.joaororiz.desafio.android.repository.CharactereRepository
+import com.joaororiz.desafio.android.useCase.CharacterUseCase
 import com.joaororiz.desafio.android.viewModel.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
 
 class MainViewModel(
-    private val repository: CharactereRepository,
+    private val useCase: CharacterUseCase,
     private val app: Application
 ) : AndroidViewModel(app) {
     private val disposable = CompositeDisposable()
@@ -67,7 +67,7 @@ class MainViewModel(
     }
 
     fun refreshListCharacter() {
-        disposable.add(repository.listAll(LIMIT_LIST, offset).subscribe { res, error ->
+        disposable.add(useCase.listAll(LIMIT_LIST, offset).subscribe { res, error ->
             if (error == null) {
                 _listAllCharacter.value = res.results
             } else {
@@ -81,7 +81,7 @@ class MainViewModel(
     fun findComicsByCharacter() {
         _load.value = true
         getSelectedCharacter()?.let {
-            disposable.add(repository.findComicsByCharactere(it.id).subscribe { res, error ->
+            disposable.add(useCase.findComicsByCharactere(it.id).subscribe { res, error ->
                 if (error == null) {
                     if (res.results.isNullOrEmpty()) {
                         this._error.value = app.getString(R.string.empty_list)

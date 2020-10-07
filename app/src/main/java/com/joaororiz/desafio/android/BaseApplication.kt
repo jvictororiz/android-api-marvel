@@ -18,6 +18,7 @@ open class BaseApplication : Application() {
                 listOf(
                     applicationModule,
                     repositoryModule,
+                    useCaseModule,
                     dataSourceModule,
                     viewModelModules
                 )
