@@ -7,7 +7,7 @@ import com.joaororiz.desafio.android.base.BaseTest
 import com.joaororiz.desafio.android.data.entities.Character
 import com.joaororiz.desafio.android.data.entities.Comic
 import com.joaororiz.desafio.android.data.entities.GlobalResponse
-import com.joaororiz.desafio.android.repository.CharactereRepository
+import com.joaororiz.desafio.android.repository.CharacterRepository
 import com.joaororiz.desafio.android.useCase.CharacterUseCase
 import com.joaororiz.desafio.android.viewModel.main.MainViewModel
 import com.nhaarman.mockitokotlin2.any
@@ -65,15 +65,15 @@ class ListComicViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `when viewModel calls findComicsByCharactere with success but empty then sets _error with success`() {
+    fun `when viewModel calls findComicsByCharacter with success but empty then sets _error with success`() {
         val messageError = "Este personagem ainda não possui participação em Comic"
         val expectedMock = GlobalResponse(0, 0, 0, 0, listOf<Comic>())
-        whenever(useCase.findComicsByCharactere(any())).thenReturn(Single.just(expectedMock))
+        whenever(useCase.findComicsByCharacter(any())).thenReturn(Single.just(expectedMock))
         whenever(useCase.listAll(any(), any())).thenReturn(Single.just(mock()))
         whenever(app.getString(R.string.empty_list)).thenReturn(messageError)
         viewModel = MainViewModel(useCase, app)
         viewModel.error.observeForever(error)
-        viewModel.selectCharactere(Character(0, "", "", mock()))
+        viewModel.selectCharacter(Character(0, "", "", mock()))
         viewModel.findComicsByCharacter()
 
         assertNull(viewModel.listAllComics.value)
@@ -81,12 +81,12 @@ class ListComicViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `when viewModel calls findComicsByCharactere with success then sets _listAllComics with success`() {
+    fun `when viewModel calls findComicsByCharacter with success then sets _listAllComics with success`() {
         val expectedMock = GlobalResponse(0, 0, 0, 0, listOf(Comic("", "", mock(), listOf())))
-        whenever(useCase.findComicsByCharactere(any())).thenReturn(Single.just(expectedMock))
+        whenever(useCase.findComicsByCharacter(any())).thenReturn(Single.just(expectedMock))
         whenever(useCase.listAll(any(), any())).thenReturn(Single.just(mock()))
         viewModel = MainViewModel(useCase, app)
-        viewModel.selectCharactere(Character(0, "", "", mock()))
+        viewModel.selectCharacter(Character(0, "", "", mock()))
         viewModel.listAllComics.observeForever(listAllComics)
         viewModel.error.observeForever(error)
         viewModel.findComicsByCharacter()
@@ -99,14 +99,14 @@ class ListComicViewModelTest : BaseTest() {
     }
 
     @Test
-    fun `when viewModel calls findComicsByCharactere with error then sets _error with success`() {
+    fun `when viewModel calls findComicsByCharacter with error then sets _error with success`() {
         val messageError = "Ocorreu um erro ao carregar os itens"
         whenever(useCase.listAll(any(), any())).thenReturn(Single.just(mock()))
-        whenever(useCase.findComicsByCharactere(any())).thenReturn(Single.error(Exception(messageError)))
+        whenever(useCase.findComicsByCharacter(any())).thenReturn(Single.error(Exception(messageError)))
         whenever(app.getString(R.string.error)).thenReturn(messageError)
 
         viewModel = MainViewModel(useCase, app)
-        viewModel.selectCharactere(Character(0, "", "", mock()))
+        viewModel.selectCharacter(Character(0, "", "", mock()))
         viewModel.findComicsByCharacter()
         viewModel.error.observeForever(error)
 

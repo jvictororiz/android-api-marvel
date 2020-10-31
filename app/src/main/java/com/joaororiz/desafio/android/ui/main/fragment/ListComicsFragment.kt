@@ -11,7 +11,7 @@ import androidx.navigation.fragment.findNavController
 import com.joaororiz.desafio.android.R
 import com.joaororiz.desafio.android.databinding.FragmentCharacterListBinding
 import com.joaororiz.desafio.android.extension.listenerEnd
-import com.joaororiz.desafio.android.ui.adapter.CharactereListAdapter
+import com.joaororiz.desafio.android.ui.adapter.CharacterListAdapter
 import com.joaororiz.desafio.android.viewModel.main.MainViewModel
 import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 
@@ -19,7 +19,7 @@ import org.koin.androidx.viewmodel.ext.android.sharedViewModel
 class ListComicsFragment : Fragment() {
     private lateinit var binding: FragmentCharacterListBinding
     private val adapter by lazy {
-        CharactereListAdapter()
+        CharacterListAdapter()
     }
 
     private val viewModel by sharedViewModel<MainViewModel>()
@@ -79,7 +79,7 @@ class ListComicsFragment : Fragment() {
         }
 
         adapter.eventClick = {
-            viewModel.selectCharactere(it)
+            viewModel.selectCharacter(it)
             findNavController().navigate(R.id.action_listComicsFragment_to_detailCharactersFragment)
         }
 

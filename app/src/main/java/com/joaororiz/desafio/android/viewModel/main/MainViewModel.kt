@@ -1,12 +1,14 @@
 package com.joaororiz.desafio.android.viewModel.main
 
 import android.app.Application
+import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.joaororiz.desafio.android.R
 import com.joaororiz.desafio.android.data.entities.Character
 import com.joaororiz.desafio.android.data.entities.Comic
+import com.joaororiz.desafio.android.di.repositoryModule
 import com.joaororiz.desafio.android.useCase.CharacterUseCase
 import com.joaororiz.desafio.android.viewModel.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -39,7 +41,7 @@ class MainViewModel(
         get() = _resetListCharacter
 
     private val _selectCharacter = SingleLiveEvent<Character>()
-    val selectCharacter : LiveData<Character>
+    val selectCharacter: LiveData<Character>
         get() = _selectCharacter
 
     private val _listAllComics = SingleLiveEvent<List<Comic>>()
@@ -69,24 +71,39 @@ class MainViewModel(
     fun refreshListCharacter() {
         disposable.add(useCase.listAll(LIMIT_LIST, offset).subscribe { res, error ->
             if (error == null) {
-                _listAllCharacter.value = res.results
+                _listAllCharacter.value = res
+                useCase.saveAllCharacters(res).subscribe()
             } else {
-                this._error.value = error.message
+                locadCharacterLocal()
             }
             _loadSwipe.value = false
             _load.value = false
         })
     }
 
+    private fun locadCharacterLocal() {
+        disposable.add(
+            useCase.listAllLocal().subscribe { res, error ->
+              if(res.isEmpty()){
+                  this._error.value = app.applicationContext.getString(R.string.error_empty_character)
+              }else{
+//                  _resetListCharacter.postValue(null)
+                  _listAllCharacter.value = res
+              }
+            }
+        )
+
+    }
+
     fun findComicsByCharacter() {
         _load.value = true
         getSelectedCharacter()?.let {
-            disposable.add(useCase.findComicsByCharactere(it.id).subscribe { res, error ->
+            disposable.add(useCase.findComicsByCharacter(it.id ?: -1).subscribe { res, error ->
                 if (error == null) {
-                    if (res.results.isNullOrEmpty()) {
+                    if (res.isNullOrEmpty()) {
                         this._error.value = app.getString(R.string.empty_list)
                     } else {
-                        _listAllComics.value = res.results
+                        _listAllComics.value = res
                     }
                 } else {
                     this._error.value = app.getString(R.string.error)
@@ -97,18 +114,18 @@ class MainViewModel(
 
     }
 
-    fun selectCharactere(character: Character) {
+    fun selectCharacter(character: Character) {
         _selectCharacter.value = character
     }
 
     fun getSelectedCharacter() = _selectCharacter.value
 
     fun getDescription(): String {
-       return if(_selectCharacter.value?.description.isNullOrEmpty()){
+        return if (_selectCharacter.value?.description.isNullOrEmpty()) {
             app.getString(R.string.empty_description)
-        }else{
-           _selectCharacter.value?.description?:""
-       }
+        } else {
+            _selectCharacter.value?.description ?: ""
+        }
     }
 
 

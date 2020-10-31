@@ -20,6 +20,7 @@ open class BaseApplication : Application() {
                     repositoryModule,
                     useCaseModule,
                     dataSourceModule,
+                    daoModule,
                     viewModelModules
                 )
             )

@@ -1,8 +1,10 @@
 package com.joaororiz.desafio.android.di
 
 import android.content.Context
+import androidx.room.Room
 import com.google.gson.GsonBuilder
 import com.joaororiz.desafio.android.extension.md5
+import com.joaororiz.desafio.android.repository.datasource.character.local.database.LocalDatabase
 import com.squareup.picasso.OkHttp3Downloader
 import com.squareup.picasso.Picasso
 import okhttp3.HttpUrl
@@ -18,21 +20,19 @@ private const val CONNECT_TIMEOUT: Long = 15L
 private const val READ_TIMEOUT: Long = 15L
 
 
-
 fun picasso(context: Context, downloader: OkHttpClient): Picasso =
     Picasso.Builder(context)
         .downloader(OkHttp3Downloader(downloader))
         .loggingEnabled(true)
         .build()
 
-inline fun <reified T> buildWebService(baseUrl: String, httpClient: OkHttpClient): T {
-    val retrofit = Retrofit.Builder()
+fun  buildWebService(baseUrl: String, httpClient: OkHttpClient): Retrofit {
+    return Retrofit.Builder()
         .baseUrl(baseUrl)
         .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
         .addConverterFactory(GsonConverterFactory.create(GsonBuilder().setLenient().create()))
         .client(httpClient)
         .build()
-    return retrofit.create(T::class.java)
 }
 
 fun createHttpClient(): OkHttpClient {
@@ -60,3 +60,9 @@ fun createHttpClient(): OkHttpClient {
         readTimeout(READ_TIMEOUT, TimeUnit.SECONDS)
     }.build()
 }
+
+
+fun databaseBuilder(context: Context) =
+    Room.databaseBuilder(context, LocalDatabase::class.java, "LocalDatabase")
+    .fallbackToDestructiveMigration()
+    .build()

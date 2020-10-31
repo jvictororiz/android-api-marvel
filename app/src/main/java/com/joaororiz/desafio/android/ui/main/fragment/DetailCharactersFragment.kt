@@ -44,7 +44,7 @@ class DetailCharactersFragment : Fragment() {
         (activity as AppCompatActivity).supportActionBar?.setDisplayHomeAsUpEnabled(true)
         (activity as AppCompatActivity).supportActionBar?.setDisplayShowHomeEnabled(true)
         viewModel.getSelectedCharacter()?.run {
-            img_background.setImageFromUrl(this.thumbnail.getFantasticUrl(), R.drawable.ic_round_account_circle)
+            img_background.setImageFromUrl(this.thumbnail?.getFantasticUrl(), R.drawable.ic_round_account_circle)
         }
     }
 

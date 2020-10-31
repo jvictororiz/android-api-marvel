@@ -21,6 +21,6 @@ data class ComicPriceDTO(
 data class ComicDTO(
     val title: String,
     val description: String?="",
-    val thumbnail: ThumbnailDTO,
-    val prices: List<ComicPriceDTO>
+    val thumbnail: ThumbnailDTO
 ) : Parcelable
+

@@ -10,23 +10,22 @@ import com.joaororiz.desafio.android.extension.getLargeUrl
 import com.joaororiz.desafio.android.extension.setImageFromUrl
 import kotlinx.android.synthetic.main.item_character.view.*
 
-class CharactereListAdapter(var list: MutableList<Character> = mutableListOf()) : RecyclerView.Adapter<CharactereListAdapter.CharactereViewHolder>() {
+class CharacterListAdapter(var list: MutableList<Character> = mutableListOf()) : RecyclerView.Adapter<CharacterListAdapter.CharacterViewHolder>() {
     var eventClick: ((item: Character) -> Unit)? = null
 
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharactereViewHolder {
+    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CharacterViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_character, parent, false)
-        return CharactereViewHolder(view)
+        return CharacterViewHolder(view)
     }
 
     override fun getItemCount() = list.size
 
-    override fun onBindViewHolder(holder: CharactereViewHolder, position: Int) {
+    override fun onBindViewHolder(holder: CharacterViewHolder, position: Int) {
         holder.bind(list[position])
     }
 
     fun updateList(listCharacter: List<Character>) {
-        val position = list.lastIndex-1
         list.addAll(listCharacter)
        notifyDataSetChanged()
     }
@@ -36,7 +35,7 @@ class CharactereListAdapter(var list: MutableList<Character> = mutableListOf()) 
         notifyDataSetChanged()
     }
 
-    inner class CharactereViewHolder(
+    inner class CharacterViewHolder(
         itemView: View
     ) : RecyclerView.ViewHolder(itemView) {
 
@@ -45,7 +44,8 @@ class CharactereListAdapter(var list: MutableList<Character> = mutableListOf()) 
                 eventClick?.invoke( character)
             }
             itemView.tv_name.text = character.name
-            itemView.img_background.setImageFromUrl(character.thumbnail.getLargeUrl(), R.drawable.ic_round_account_circle)
+            itemView.img_background.setImageFromUrl(character.thumbnail?.getLargeUrl(), R.drawable.ic_round_account_circle)
         }
     }
+
 }

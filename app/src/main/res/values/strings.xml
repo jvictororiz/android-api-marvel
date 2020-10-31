@@ -1,7 +1,7 @@
 <resources>
     <string name="app_name">Desafio Android</string>
     <string name="title">Personagens</string>
-    <string name="error">Ocorreu um erro ao carregar os itens</string>
+    <string name="error">Ocorreu um erro ao carregar os itens, click para tentar novamente.</string>
     <string name="visualizar_hq_mais_cara">Visualizar HQ mais cara</string>
     <string name="hq_mais_cara">HQ Mais Cara</string>
     <string name="pre_os">Preços</string>
@@ -13,5 +13,6 @@
     <string name="print_price">Preço de impressão</string>
     <string name="empty_list">Este personagem ainda não possui participação em Comic</string>
     <string name="empty_description">Este personangem não possui nenhuma descrição</string>
+    <string name="error_empty_character">Não foi encontrado nenhum personagem, verifique sua internet e tente novamente</string>
 
 </resources>

@@ -20,8 +20,7 @@ data class ComicPrice(
 
 @Parcelize
 data class Comic(
-    val title: String,
+    val title: String?=null,
     val description: String?="",
-    val thumbnail: Thumbnail,
-    val prices: List<ComicPrice>
+    val thumbnail: Thumbnail?=null
 ) : Parcelable

@@ -14,7 +14,7 @@ import retrofit2.http.Query
 interface MarvelService {
 
     @GET("characters")
-    fun findCharacteres(@Query("limit") limit: Int, @Query("offset") offset: Int): Single<Response<GlobalResponse<Character>>>
+    fun findCharacters(@Query("limit") limit: Int, @Query("offset") offset: Int): Single<Response<GlobalResponse<Character>>>
 
     @GET("characters/{characterId}/comics")
     fun findComics(@Path("characterId") characterId:Int ): Single<Response<GlobalResponse<Comic>>>
