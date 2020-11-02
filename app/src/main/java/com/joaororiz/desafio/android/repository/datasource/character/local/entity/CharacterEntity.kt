@@ -14,5 +14,8 @@ data class CharacterEntity(
     @Embedded
     var thumbnail: ThumbnailEntity? = null
 )
-
+data class ThumbnailEntity(
+    var path: String? = null,
+    var extension: String? = null
+)
 

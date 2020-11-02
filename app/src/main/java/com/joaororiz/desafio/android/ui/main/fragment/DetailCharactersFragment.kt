@@ -35,7 +35,7 @@ class DetailCharactersFragment : Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.findComicsByCharacter()
+        viewModel.findLocalComicsByCharacter()
         configViews()
         setupObservers()
     }

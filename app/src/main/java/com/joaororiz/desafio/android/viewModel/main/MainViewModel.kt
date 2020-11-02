@@ -1,14 +1,12 @@
 package com.joaororiz.desafio.android.viewModel.main
 
 import android.app.Application
-import android.util.Log
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import com.joaororiz.desafio.android.R
 import com.joaororiz.desafio.android.data.entities.Character
 import com.joaororiz.desafio.android.data.entities.Comic
-import com.joaororiz.desafio.android.di.repositoryModule
 import com.joaororiz.desafio.android.useCase.CharacterUseCase
 import com.joaororiz.desafio.android.viewModel.SingleLiveEvent
 import io.reactivex.disposables.CompositeDisposable
@@ -20,7 +18,7 @@ class MainViewModel(
     private val disposable = CompositeDisposable()
     private var offset = 0
 
-    private val _error = SingleLiveEvent<String>()
+    private var _error = SingleLiveEvent<String>()
     val error: LiveData<String>
         get() = _error
 
@@ -28,23 +26,21 @@ class MainViewModel(
     val load: LiveData<Boolean>
         get() = _load
 
-    private val _loadSwipe = SingleLiveEvent<Boolean>()
+    private val _loadSwipe = MutableLiveData<Boolean>()
     val loadSwipe: LiveData<Boolean>
         get() = _loadSwipe
 
-    private val _listAllCharacter = SingleLiveEvent<List<Character>>()
+    private val _listAllCharacter = MutableLiveData<List<Character>>()
     val listAllCharacter: LiveData<List<Character>>
         get() = _listAllCharacter
 
-    private val _resetListCharacter = SingleLiveEvent<Void>()
-    val resetListCharacter: LiveData<Void>
+    private val _resetListCharacter = SingleLiveEvent<Any>()
+    val resetListCharacter: LiveData<Any>
         get() = _resetListCharacter
 
     private val _selectCharacter = SingleLiveEvent<Character>()
-    val selectCharacter: LiveData<Character>
-        get() = _selectCharacter
 
-    private val _listAllComics = SingleLiveEvent<List<Comic>>()
+    private val _listAllComics = MutableLiveData<List<Comic>>()
     val listAllComics: LiveData<List<Comic>>
         get() = _listAllComics
 
@@ -84,25 +80,40 @@ class MainViewModel(
     private fun locadCharacterLocal() {
         disposable.add(
             useCase.listAllLocal().subscribe { res, error ->
-              if(res.isEmpty()){
-                  this._error.value = app.applicationContext.getString(R.string.error_empty_character)
-              }else{
-//                  _resetListCharacter.postValue(null)
-                  _listAllCharacter.value = res
-              }
+                if (res.isEmpty()) {
+                    this._error.value = app.applicationContext.getString(R.string.error_empty_character)
+                } else {
+                    _resetListCharacter.value = null
+                    _listAllCharacter.value = res
+                }
             }
         )
 
     }
 
-    fun findComicsByCharacter() {
+    fun findLocalComicsByCharacter() {
         _load.value = true
+        getSelectedCharacter()?.id?.let {
+            useCase.findComicsByCharacterLocal(it)
+                .doOnSubscribe { disposable::add }
+                .subscribe {res, error->
+                if(error== null || res.isEmpty()){
+                    findComicsByCharacter()
+                }else{
+                    _listAllComics.value = res
+                }
+            }
+        }
+    }
+
+   private fun findComicsByCharacter(){
         getSelectedCharacter()?.let {
             disposable.add(useCase.findComicsByCharacter(it.id ?: -1).subscribe { res, error ->
                 if (error == null) {
                     if (res.isNullOrEmpty()) {
                         this._error.value = app.getString(R.string.empty_list)
                     } else {
+                        saveLocalComicsByCharacter(it.id ?: -1, res)
                         _listAllComics.value = res
                     }
                 } else {
@@ -112,6 +123,10 @@ class MainViewModel(
             })
         }
 
+    }
+
+    private fun saveLocalComicsByCharacter(idCharacter :Int, res: List<Comic>) {
+        useCase.saveAllComics(idCharacter, res).doOnSubscribe { disposable.add(it)}.subscribe()
     }
 
     fun selectCharacter(character: Character) {

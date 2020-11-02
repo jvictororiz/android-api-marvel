@@ -6,14 +6,14 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Thumbnail(
-    val path: String?=null,
-    val extension: String?=null
+    var path: String?=null,
+    var extension: String?=null
 ) : Parcelable
 
 @Parcelize
 data class Character(
-    val id: Int? = null,
-    val name: String? = null,
-    val description: String? = null,
-    val thumbnail: Thumbnail? = null
+    var id: Int? = null,
+    var name: String? = null,
+    var description: String? = null,
+    var thumbnail: Thumbnail? = null
 ) : Parcelable

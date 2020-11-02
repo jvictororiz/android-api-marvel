@@ -7,7 +7,6 @@ import com.joaororiz.desafio.android.base.BaseTest
 import com.joaororiz.desafio.android.data.entities.Character
 import com.joaororiz.desafio.android.data.entities.Comic
 import com.joaororiz.desafio.android.data.entities.GlobalResponse
-import com.joaororiz.desafio.android.repository.CharacterRepository
 import com.joaororiz.desafio.android.useCase.CharacterUseCase
 import com.joaororiz.desafio.android.viewModel.main.MainViewModel
 import com.nhaarman.mockitokotlin2.any
@@ -74,7 +73,7 @@ class ListComicViewModelTest : BaseTest() {
         viewModel = MainViewModel(useCase, app)
         viewModel.error.observeForever(error)
         viewModel.selectCharacter(Character(0, "", "", mock()))
-        viewModel.findComicsByCharacter()
+        viewModel.findLocalComicsByCharacter()
 
         assertNull(viewModel.listAllComics.value)
         verify(error).onChanged(messageError)
@@ -89,7 +88,7 @@ class ListComicViewModelTest : BaseTest() {
         viewModel.selectCharacter(Character(0, "", "", mock()))
         viewModel.listAllComics.observeForever(listAllComics)
         viewModel.error.observeForever(error)
-        viewModel.findComicsByCharacter()
+        viewModel.findLocalComicsByCharacter()
 
 
         verify(listAllComics).onChanged(expectedMock.results)
@@ -107,7 +106,7 @@ class ListComicViewModelTest : BaseTest() {
 
         viewModel = MainViewModel(useCase, app)
         viewModel.selectCharacter(Character(0, "", "", mock()))
-        viewModel.findComicsByCharacter()
+        viewModel.findLocalComicsByCharacter()
         viewModel.error.observeForever(error)
 
         verify(error).onChanged(messageError)

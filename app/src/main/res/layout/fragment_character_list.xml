@@ -60,6 +60,8 @@
                 android:background="@drawable/shape_line"
                 android:clickable="true"
                 android:focusable="true"
+                android:layout_marginHorizontal="25dp"
+                android:gravity="center"
                 android:foreground="?attr/selectableItemBackground"
                 android:padding="9dp"
                 android:text="@string/error"

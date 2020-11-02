@@ -4,7 +4,7 @@ apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     testOptions.unitTests.includeAndroidResources = true
     defaultConfig {
         applicationId "com.joaororiz.desafio.android"

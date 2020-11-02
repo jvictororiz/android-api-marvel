@@ -18,13 +18,3 @@ fun Thumbnail.getLargeUrl(): String {
 fun Thumbnail.getFantasticUrl(): String {
     return "$path/portrait_fantastic.$extension"
 }
-
-fun Float.toMoney(): String {
-    val numberFormat: NumberFormat = NumberFormat.getCurrencyInstance(Locale("pt", "Br"))
-    return try {
-        return numberFormat.format(this)
-    } catch (ex: Exception) {
-        ex.printStackTrace()
-        ""
-    }
-}
